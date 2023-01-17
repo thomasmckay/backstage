@@ -15,7 +15,7 @@
  */
 
 import { coreServices } from '@backstage/backend-plugin-api';
-import { startTestBackend } from '@backstage/backend-test-utils';
+import { startTestBackend } from '@backstage/backend-test-utils/alpha';
 import { ConfigReader } from '@backstage/config';
 import { eventsExtensionPoint } from '@backstage/plugin-events-node/alpha';
 import {

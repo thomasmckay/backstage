@@ -28,9 +28,9 @@ import {
   urlReaderFactory,
 } from '@backstage/backend-app-api';
 import { coreServices } from '@backstage/backend-plugin-api';
-import { startTestBackend } from '@backstage/backend-test-utils';
+import { startTestBackend } from '@backstage/backend-test-utils/alpha';
 import { ConfigReader } from '@backstage/config';
-import { catalogPlugin } from '@backstage/plugin-catalog-backend';
+import { catalogPlugin } from '@backstage/plugin-catalog-backend/alpha';
 import { IncrementalEntityProvider } from '.';
 import { incrementalIngestionEntityProviderCatalogModule } from './alpha';
 

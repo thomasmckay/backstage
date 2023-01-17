@@ -17,7 +17,7 @@
 import mockFs from 'mock-fs';
 import { resolve as resolvePath } from 'path';
 import fetch from 'node-fetch';
-import { startTestBackend } from '@backstage/backend-test-utils';
+import { startTestBackend } from '@backstage/backend-test-utils/alpha';
 import { appPlugin } from './appPlugin';
 
 describe('appPlugin', () => {

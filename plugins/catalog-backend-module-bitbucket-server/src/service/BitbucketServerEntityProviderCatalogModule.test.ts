@@ -21,7 +21,7 @@ import {
   PluginTaskScheduler,
   TaskScheduleDefinition,
 } from '@backstage/backend-tasks';
-import { startTestBackend } from '@backstage/backend-test-utils';
+import { startTestBackend } from '@backstage/backend-test-utils/alpha';
 import { catalogProcessingExtensionPoint } from '@backstage/plugin-catalog-node/alpha';
 import { bitbucketServerEntityProviderCatalogModule } from './BitbucketServerEntityProviderCatalogModule';
 import { Duration } from 'luxon';

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { startTestBackend } from '@backstage/backend-test-utils';
+import { startTestBackend } from '@backstage/backend-test-utils/alpha';
 import { eventsExtensionPoint } from '@backstage/plugin-events-node/alpha';
 import { gitlabEventRouterEventsModule } from './GitlabEventRouterEventsModule';
 import { GitlabEventRouter } from '../router/GitlabEventRouter';

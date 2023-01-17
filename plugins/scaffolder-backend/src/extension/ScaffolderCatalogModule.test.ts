@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { catalogProcessingExtensionPoint } from '@backstage/plugin-catalog-node';
+import { catalogProcessingExtensionPoint } from '@backstage/plugin-catalog-node/alpha';
 import { ScaffolderEntitiesProcessor } from '../processor';
 import { scaffolderCatalogModule } from './ScaffolderCatalogModule';
-import { startTestBackend } from '@backstage/backend-test-utils';
+import { startTestBackend } from '@backstage/backend-test-utils/alpha';
 
 describe('ScaffolderCatalogModule', () => {
   it('should register the extension point', async () => {

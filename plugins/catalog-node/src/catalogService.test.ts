@@ -15,7 +15,7 @@
  */
 
 import { createBackendModule } from '@backstage/backend-plugin-api';
-import { startTestBackend } from '@backstage/backend-test-utils';
+import { startTestBackend } from '@backstage/backend-test-utils/alpha';
 import { CatalogClient } from '@backstage/catalog-client';
 import { catalogServiceRef } from './catalogService';
 

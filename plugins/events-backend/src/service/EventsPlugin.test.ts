@@ -20,7 +20,7 @@ import {
   coreServices,
   createBackendModule,
 } from '@backstage/backend-plugin-api';
-import { startTestBackend } from '@backstage/backend-test-utils';
+import { startTestBackend } from '@backstage/backend-test-utils/alpha';
 import { eventsExtensionPoint } from '@backstage/plugin-events-node/alpha';
 import {
   TestEventBroker,

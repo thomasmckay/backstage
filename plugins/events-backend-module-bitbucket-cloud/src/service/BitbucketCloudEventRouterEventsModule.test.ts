@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { startTestBackend } from '@backstage/backend-test-utils';
+import { startTestBackend } from '@backstage/backend-test-utils/alpha';
 import { eventsExtensionPoint } from '@backstage/plugin-events-node/alpha';
 import { bitbucketCloudEventRouterEventsModule } from './BitbucketCloudEventRouterEventsModule';
 import { BitbucketCloudEventRouter } from '../router/BitbucketCloudEventRouter';

@@ -22,7 +22,7 @@ import {
 import {
   startTestBackend,
   mockConfigFactory,
-} from '@backstage/backend-test-utils';
+} from '@backstage/backend-test-utils/alpha';
 import { catalogProcessingExtensionPoint } from '@backstage/plugin-catalog-node/alpha';
 import { eventsExtensionPoint } from '@backstage/plugin-events-node/alpha';
 import { Duration } from 'luxon';

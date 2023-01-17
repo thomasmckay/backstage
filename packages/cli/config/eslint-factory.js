@@ -64,7 +64,7 @@ function createConfig(dir, extraConfig = {}) {
       ...(extraExtends ?? []),
     ],
     parser: '@typescript-eslint/parser',
-    plugins: ['import', ...(plugins ?? [])],
+    plugins: ['import', 'monorepo', ...(plugins ?? [])],
     env: {
       jest: true,
       ...env,
