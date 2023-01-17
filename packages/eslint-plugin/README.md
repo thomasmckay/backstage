@@ -35,6 +35,6 @@ rules: {
 
 The following rules are provided by this plugin:
 
-| Rule                                      | Description                                                                      |
-| ----------------------------------------- | -------------------------------------------------------------------------------- |
-| `@backstage/no-forbidden-package-imports` | Disallow internal monorepo imports from package sub-paths that are not exported. |
+| Rule                                      | Description                                                                     |
+| ----------------------------------------- | ------------------------------------------------------------------------------- |
+| `@backstage/no-forbidden-package-imports` | Disallow internal monorepo imports from package subpaths that are not exported. |
