@@ -60,7 +60,7 @@ function createConfig(dir, extraConfig = {}) {
       '@spotify/eslint-config-typescript',
       'prettier',
       'plugin:jest/recommended',
-      'plugin:monorepo/recommended',
+      'plugin:@backstage/recommended',
       ...(extraExtends ?? []),
     ],
     parser: '@typescript-eslint/parser',
@@ -87,6 +87,7 @@ function createConfig(dir, extraConfig = {}) {
       '@typescript-eslint/no-shadow': 'error',
       '@typescript-eslint/no-redeclare': 'error',
       'no-undef': 'off',
+      'monorepo/no-relative-import': 'error',
       'import/newline-after-import': 'error',
       'import/no-extraneous-dependencies': [
         'error',
