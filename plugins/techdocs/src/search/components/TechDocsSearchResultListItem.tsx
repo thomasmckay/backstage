@@ -16,7 +16,6 @@
 
 import React, { PropsWithChildren, ReactNode } from 'react';
 import {
-  Divider,
   ListItem,
   ListItemIcon,
   ListItemText,
@@ -52,6 +51,7 @@ export type TechDocsSearchResultListItemProps = {
   asListItem?: boolean;
   asLink?: boolean;
   title?: string;
+  toggleModal?: () => void;
 };
 
 /**
@@ -71,6 +71,7 @@ export const TechDocsSearchResultListItem = (
     asLink = true,
     title,
     icon,
+    toggleModal,
   } = props;
   const classes = useStyles();
 
@@ -80,11 +81,19 @@ export const TechDocsSearchResultListItem = (
       attributes: { to: result.location },
       value: rank,
     });
+    if (toggleModal) {
+      toggleModal();
+    }
   };
 
   const LinkWrapper = ({ children }: PropsWithChildren<{}>) =>
     asLink ? (
-      <Link noTrack to={result.location} onClick={handleClick}>
+      <Link
+        noTrack
+        to={result.location}
+        onClick={handleClick}
+        onKeyDown={e => (e.key === 'Enter' ? handleClick : undefined)}
+      >
         {children}
       </Link>
     ) : (
@@ -164,13 +173,10 @@ export const TechDocsSearchResultListItem = (
 
   const ListItemWrapper = ({ children }: PropsWithChildren<{}>) =>
     asListItem ? (
-      <>
-        <ListItem alignItems="flex-start">
-          {icon && <ListItemIcon>{icon}</ListItemIcon>}
-          <div className={classes.flexContainer}>{children}</div>
-        </ListItem>
-        <Divider component="li" />
-      </>
+      <ListItem alignItems="flex-start" divider>
+        {icon && <ListItemIcon>{icon}</ListItemIcon>}
+        <div className={classes.flexContainer}>{children}</div>
+      </ListItem>
     ) : (
       <>{children}</>
     );

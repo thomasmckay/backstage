@@ -18,7 +18,6 @@ import React, { ReactNode } from 'react';
 import {
   Box,
   Chip,
-  Divider,
   ListItem,
   ListItemIcon,
   ListItemText,
@@ -53,6 +52,7 @@ export interface ToolSearchResultListItemProps {
   result: IndexableDocument;
   highlight?: ResultHighlight;
   rank?: number;
+  toggleModal?: () => void;
 }
 
 /** @public */
@@ -66,50 +66,54 @@ export function ToolSearchResultListItem(props: ToolSearchResultListItemProps) {
       attributes: { to: result.location },
       value: props.rank,
     });
+
+    if (props.toggleModal) {
+      props.toggleModal();
+    }
   };
 
   return (
-    <>
-      <ListItem alignItems="flex-start">
-        {props.icon && <ListItemIcon>{props.icon}</ListItemIcon>}
-        <div className={classes.flexContainer}>
-          <ListItemText
-            className={classes.itemText}
-            primaryTypographyProps={{ variant: 'h6' }}
-            primary={
-              <Link noTrack to={result.location} onClick={handleClick}>
-                {props.highlight?.fields.title ? (
-                  <HighlightedSearchResultText
-                    text={props.highlight.fields.title}
-                    preTag={props.highlight.preTag}
-                    postTag={props.highlight.postTag}
-                  />
-                ) : (
-                  result.title
-                )}
-              </Link>
-            }
-            secondary={
-              props.highlight?.fields.text ? (
+    <ListItem alignItems="flex-start">
+      {props.icon && <ListItemIcon>{props.icon}</ListItemIcon>}
+      <div className={classes.flexContainer}>
+        <ListItemText
+          className={classes.itemText}
+          primaryTypographyProps={{ variant: 'h6' }}
+          primary={
+            <Link
+              noTrack
+              to={result.location}
+              onClick={handleClick}
+              onKeyDown={e => (e.key === 'Enter' ? handleClick : undefined)}
+            >
+              {props.highlight?.fields.title ? (
                 <HighlightedSearchResultText
-                  text={props.highlight.fields.text}
+                  text={props.highlight.fields.title}
                   preTag={props.highlight.preTag}
                   postTag={props.highlight.postTag}
                 />
               ) : (
-                result.text
-              )
-            }
-          />
-          <Box>
-            {result.tags &&
-              result.tags.map((tag: string) => (
-                <Chip label={tag} size="small" />
-              ))}
-          </Box>
-        </div>
-      </ListItem>
-      <Divider component="li" />
-    </>
+                result.title
+              )}
+            </Link>
+          }
+          secondary={
+            props.highlight?.fields.text ? (
+              <HighlightedSearchResultText
+                text={props.highlight.fields.text}
+                preTag={props.highlight.preTag}
+                postTag={props.highlight.postTag}
+              />
+            ) : (
+              result.text
+            )
+          }
+        />
+        <Box>
+          {result.tags &&
+            result.tags.map((tag: string) => <Chip label={tag} size="small" />)}
+        </Box>
+      </div>
+    </ListItem>
   );
 }

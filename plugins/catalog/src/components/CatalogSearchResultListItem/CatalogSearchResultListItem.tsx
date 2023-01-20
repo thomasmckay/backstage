@@ -18,7 +18,6 @@ import React, { ReactNode } from 'react';
 import {
   Box,
   Chip,
-  Divider,
   ListItem,
   ListItemIcon,
   ListItemText,
@@ -53,6 +52,7 @@ export interface CatalogSearchResultListItemProps {
   result: IndexableDocument;
   highlight?: ResultHighlight;
   rank?: number;
+  toggleModal?: () => void;
 }
 
 /** @public */
@@ -69,52 +69,55 @@ export function CatalogSearchResultListItem(
       attributes: { to: result.location },
       value: props.rank,
     });
+    if (props.toggleModal) {
+      props.toggleModal();
+    }
   };
 
   return (
-    <>
-      <ListItem alignItems="flex-start">
-        {props.icon && <ListItemIcon>{props.icon}</ListItemIcon>}
-        <div className={classes.flexContainer}>
-          <ListItemText
-            className={classes.itemText}
-            primaryTypographyProps={{ variant: 'h6' }}
-            primary={
-              <Link noTrack to={result.location} onClick={handleClick}>
-                {highlight?.fields.title ? (
-                  <HighlightedSearchResultText
-                    text={highlight.fields.title}
-                    preTag={highlight.preTag}
-                    postTag={highlight.postTag}
-                  />
-                ) : (
-                  result.title
-                )}
-              </Link>
-            }
-            secondary={
-              highlight?.fields.text ? (
+    <ListItem alignItems="flex-start" divider>
+      {props.icon && <ListItemIcon>{props.icon}</ListItemIcon>}
+      <div className={classes.flexContainer}>
+        <ListItemText
+          className={classes.itemText}
+          primaryTypographyProps={{ variant: 'h6' }}
+          primary={
+            <Link
+              noTrack
+              to={result.location}
+              onClick={handleClick}
+              onKeyDown={e => (e.key === 'Enter' ? handleClick : undefined)}
+            >
+              {highlight?.fields.title ? (
                 <HighlightedSearchResultText
-                  text={highlight.fields.text}
+                  text={highlight.fields.title}
                   preTag={highlight.preTag}
                   postTag={highlight.postTag}
                 />
               ) : (
-                result.text
-              )
-            }
-          />
-          <Box>
-            {result.kind && (
-              <Chip label={`Kind: ${result.kind}`} size="small" />
-            )}
-            {result.lifecycle && (
-              <Chip label={`Lifecycle: ${result.lifecycle}`} size="small" />
-            )}
-          </Box>
-        </div>
-      </ListItem>
-      <Divider component="li" />
-    </>
+                result.title
+              )}
+            </Link>
+          }
+          secondary={
+            highlight?.fields.text ? (
+              <HighlightedSearchResultText
+                text={highlight.fields.text}
+                preTag={highlight.preTag}
+                postTag={highlight.postTag}
+              />
+            ) : (
+              result.text
+            )
+          }
+        />
+        <Box>
+          {result.kind && <Chip label={`Kind: ${result.kind}`} size="small" />}
+          {result.lifecycle && (
+            <Chip label={`Lifecycle: ${result.lifecycle}`} size="small" />
+          )}
+        </Box>
+      </div>
+    </ListItem>
   );
 }

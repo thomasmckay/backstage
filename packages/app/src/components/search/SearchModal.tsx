@@ -24,17 +24,11 @@ import {
   List,
   makeStyles,
   Paper,
-  useTheme,
 } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import BuildIcon from '@material-ui/icons/Build';
 import LaunchIcon from '@material-ui/icons/Launch';
-import {
-  CatalogIcon,
-  DocsIcon,
-  Link,
-  useContent,
-} from '@backstage/core-components';
+import { CatalogIcon, DocsIcon, Link } from '@backstage/core-components';
 import { useApi, useRouteRef } from '@backstage/core-plugin-api';
 import { CatalogSearchResultListItem } from '@internal/plugin-catalog-customized';
 import {
@@ -80,9 +74,6 @@ const rootRouteRef = searchPlugin.routes.root;
 export const SearchModal = ({ toggleModal }: { toggleModal: () => void }) => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const { transitions } = useTheme();
-  const { focusContent } = useContent();
-
   const catalogApi = useApi(catalogApiRef);
 
   const { term, types } = useSearch();
@@ -92,11 +83,6 @@ export const SearchModal = ({ toggleModal }: { toggleModal: () => void }) => {
   useEffect(() => {
     searchBarRef?.current?.focus();
   });
-
-  const handleSearchResulClick = useCallback(() => {
-    toggleModal();
-    setTimeout(focusContent, transitions.duration.leavingScreen);
-  }, [toggleModal, focusContent, transitions]);
 
   const handleSearchBarKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -189,7 +175,7 @@ export const SearchModal = ({ toggleModal }: { toggleModal: () => void }) => {
               alignItems="center"
             >
               <Grid item>
-                <Link to={searchPagePath} onClick={handleSearchResulClick}>
+                <Link to={searchPagePath} onClick={toggleModal}>
                   <Typography
                     component="span"
                     className={classes.viewResultsLink}
@@ -206,62 +192,51 @@ export const SearchModal = ({ toggleModal }: { toggleModal: () => void }) => {
               {({ results }) => (
                 <List>
                   {results.map(({ type, document, highlight, rank }) => {
-                    let resultItem;
                     switch (type) {
                       case 'software-catalog':
-                        resultItem = (
+                        return (
                           <CatalogSearchResultListItem
                             icon={<CatalogIcon />}
                             key={document.location}
                             result={document}
                             highlight={highlight}
                             rank={rank}
+                            toggleModal={toggleModal}
                           />
                         );
-                        break;
                       case 'techdocs':
-                        resultItem = (
+                        return (
                           <TechDocsSearchResultListItem
                             icon={<DocsIcon />}
                             key={document.location}
                             result={document}
                             highlight={highlight}
                             rank={rank}
+                            toggleModal={toggleModal}
                           />
                         );
-                        break;
                       case 'tools':
-                        resultItem = (
+                        return (
                           <ToolSearchResultListItem
                             icon={<BuildIcon />}
                             key={document.location}
                             result={document}
                             highlight={highlight}
                             rank={rank}
+                            toggleModal={toggleModal}
                           />
                         );
-                        break;
                       default:
-                        resultItem = (
+                        return (
                           <DefaultResultListItem
                             key={document.location}
                             result={document}
                             highlight={highlight}
                             rank={rank}
+                            toggleModal={toggleModal}
                           />
                         );
                     }
-                    return (
-                      <div
-                        role="button"
-                        tabIndex={0}
-                        key={`${document.location}-btn`}
-                        onClick={handleSearchResulClick}
-                        onKeyDown={handleSearchResulClick}
-                      >
-                        {resultItem}
-                      </div>
-                    );
                   })}
                 </List>
               )}
