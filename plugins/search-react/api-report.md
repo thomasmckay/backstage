@@ -8,6 +8,7 @@
 import { ApiRef } from '@backstage/core-plugin-api';
 import { AsyncState } from 'react-use/lib/useAsync';
 import { AutocompleteProps } from '@material-ui/lab';
+import { Extension } from '@backstage/core-plugin-api';
 import { ForwardRefExoticComponent } from 'react';
 import { InputBaseProps } from '@material-ui/core';
 import { JsonObject } from '@backstage/types';
@@ -19,6 +20,7 @@ import { PropsWithChildren } from 'react';
 import { default as React_2 } from 'react';
 import { ReactElement } from 'react';
 import { ReactNode } from 'react';
+import { Result } from '@backstage/plugin-search-common';
 import { ResultHighlight } from '@backstage/plugin-search-common';
 import { SearchDocument } from '@backstage/plugin-search-common';
 import { SearchQuery } from '@backstage/plugin-search-common';
@@ -34,6 +36,17 @@ export const AutocompleteFilter: (
 // @public (undocumented)
 export const CheckboxFilter: (props: SearchFilterComponentProps) => JSX.Element;
 
+// @public
+export const createSearchResultListItemExtension: <
+  P extends {
+    rank?: number | undefined;
+    highlight?: ResultHighlight | undefined;
+    result: SearchDocument;
+  },
+>(
+  options: SearchResultListItemExtensionOptions<P>,
+) => Extension<SearchResultListItemExtensionComponent<P>>;
+
 // @public (undocumented)
 export const DefaultResultListItem: (
   props: DefaultResultListItemProps,
@@ -47,6 +60,7 @@ export type DefaultResultListItemProps = {
   highlight?: ResultHighlight;
   rank?: number;
   lineClamp?: number;
+  noTrack?: boolean;
 };
 
 // @public (undocumented)
@@ -280,7 +294,10 @@ export const SearchResultContext: (
 
 // @public
 export type SearchResultContextProps = {
-  children: (state: AsyncState<SearchResultSet>) => JSX.Element | null;
+  children: (
+    state: AsyncState<SearchResultSet>,
+    query: Partial<SearchQuery>,
+  ) => JSX.Element | null;
 };
 
 // @public
@@ -313,6 +330,8 @@ export function SearchResultGroupLayout<FilterOption>(
 
 // @public
 export type SearchResultGroupLayoutProps<FilterOption> = ListProps & {
+  error?: Error;
+  loading?: boolean;
   icon: JSX.Element;
   title: ReactNode;
   titleProps?: Partial<TypographyProps>;
@@ -332,19 +351,19 @@ export type SearchResultGroupLayoutProps<FilterOption> = ListProps & {
     index: number,
     array: SearchResult_2[],
   ) => JSX.Element | null;
-  error?: Error;
-  loading?: boolean;
   noResultsComponent?: ReactNode;
+  disableRenderingWithNoResults?: boolean;
 };
 
 // @public
-export type SearchResultGroupProps<FilterOption> = Omit<
-  SearchResultGroupLayoutProps<FilterOption>,
-  'loading' | 'error' | 'resultItems' | 'filterFields'
-> & {
-  query: Partial<SearchQuery>;
-  disableRenderingWithNoResults?: boolean;
-};
+export type SearchResultGroupProps<FilterOption> = Pick<
+  SearchResultStateProps,
+  'query'
+> &
+  Omit<
+    SearchResultGroupLayoutProps<FilterOption>,
+    'loading' | 'error' | 'resultItems' | 'filterFields'
+  >;
 
 // @public
 export const SearchResultGroupSelectFilterField: (
@@ -370,40 +389,74 @@ export type SearchResultGroupTextFilterFieldProps =
 export const SearchResultList: (props: SearchResultListProps) => JSX.Element;
 
 // @public
+export type SearchResultListItemExtensionComponent<
+  P extends SearchResultListItemExtensionOptionsComponentProps,
+> = (
+  props: Omit<P, keyof SearchResultListItemExtensionOptionsComponentProps> &
+    Partial<SearchResultListItemExtensionOptionsComponentProps>,
+) => JSX.Element | null;
+
+// @public
+export type SearchResultListItemExtensionOptions<
+  T extends SearchResultListItemExtensionOptionsComponentProps = SearchResultListItemExtensionOptionsComponentProps,
+> = {
+  name: string;
+  component: (props: T) => JSX.Element | null;
+  predicate?: (result: SearchResult_2) => boolean;
+};
+
+// @public
+export type SearchResultListItemExtensionOptionsComponentProps<
+  P extends {} = {},
+  D extends SearchDocument = SearchDocument,
+> = P & {
+  rank?: Result<D>['rank'];
+  highlight?: Result<D>['highlight'];
+  result: Result<D>['document'];
+};
+
+// @public
+export const SearchResultListItemExtensions: (
+  props: SearchResultListItemExtensionsProps,
+) => JSX.Element;
+
+// @public
+export type SearchResultListItemExtensionsProps = Omit<ListProps, 'results'> & {
+  results: SearchResult_2[];
+};
+
+// @public
 export const SearchResultListLayout: (
   props: SearchResultListLayoutProps,
 ) => JSX.Element;
 
 // @public
 export type SearchResultListLayoutProps = ListProps & {
+  error?: Error;
+  loading?: boolean;
   resultItems?: SearchResult_2[];
   renderResultItem?: (
     value: SearchResult_2,
     index: number,
     array: SearchResult_2[],
   ) => JSX.Element | null;
-  error?: Error;
-  loading?: boolean;
   noResultsComponent?: ReactNode;
+  disableRenderingWithNoResults?: boolean;
 };
 
 // @public
-export type SearchResultListProps = Omit<
-  SearchResultListLayoutProps,
-  'loading' | 'error' | 'resultItems'
-> & {
-  query: Partial<SearchQuery>;
-  disableRenderingWithNoResults?: boolean;
-};
+export type SearchResultListProps = Pick<SearchResultStateProps, 'query'> &
+  Omit<SearchResultListLayoutProps, 'loading' | 'error' | 'resultItems'>;
 
 // @public (undocumented)
 export const SearchResultPager: () => JSX.Element;
 
 // @public
-export type SearchResultProps = Pick<SearchResultStateProps, 'query'> & {
-  children: (resultSet: SearchResultSet) => JSX.Element;
-  noResultsComponent?: JSX.Element;
-};
+export type SearchResultProps = Pick<SearchResultStateProps, 'query'> &
+  Omit<SearchResultListItemExtensionsProps, 'results' | 'children'> & {
+    children?: ReactNode | ((resultSet: SearchResultSet) => JSX.Element);
+    noResultsComponent?: JSX.Element;
+  };
 
 // @public
 export const SearchResultState: (props: SearchResultStateProps) => JSX.Element;
@@ -420,4 +473,9 @@ export const useSearch: () => SearchContextValue;
 
 // @public
 export const useSearchContextCheck: () => boolean;
+
+// @public
+export const useSearchResultListItemExtensions: (
+  children: ReactNode,
+) => (result: SearchResult_2, key?: number) => JSX.Element;
 ```
